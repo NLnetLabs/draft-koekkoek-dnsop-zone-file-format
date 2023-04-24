@@ -10,8 +10,10 @@ TXT=$(DRAFT)-$(VERSION).txt
 all: $(HTML) $(TXT)
 
 pages: $(HTML) $(TXT)
-	cp -p $(TXT) docs/$(TXT)
-	cp -p $(HTML) docs/$(HTML)
+	mkdir _site
+	cp -p $(TXT) _site/$(TXT)
+	cp -p $(HTML) _site/$(HTML)
+	cp -p $(HTML) _site/index.html
 
 $(HTML): $(XML)
 	xml2rfc --html -o $@ $<

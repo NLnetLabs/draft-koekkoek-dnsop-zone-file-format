@@ -38,14 +38,26 @@ well-defined, set accepted by all implementations
 
 {mainmatter}
 
-Master files provide a lean portable serialization format. Master files are
-mostly generated these days, but the format clearly reflects the fact that
-convenient editing by hand was a design goal.
-
 
 # Introduction
 
-TODO
+The presentation format defined in [@!RFC1034] section 3.6.1 and [@!RFC1035]
+section 5.1, defines syntax and semantics to present the contents of RRs in
+text form. As a zone can be expressed in the form of a list of RRs, the
+format is most often used to portably define zones, but the format has many
+other applications.
+
+The presentation format is a tabular serialization format with provisions for
+convenient editing. The format is predominantly line based and defines a
+number of entries. Control, blank and rr entries. Presentation of fixed fields
+in rr entries (owner, type, class, TTL) is clearly defined, but the RDATA
+section of the RR are given using knowledge of the typical representation for
+the data. Given the intentional extensibility of the DNS, the format is
+therefore subject to change. The format can merely define a base syntax that
+future additions must adhere too. RFCs that introduce new RRs commonly
+dedicate a section to outline the extentsions to the presentation format.
+Provisions for expressing unknown RRs is provided through generic notation
+of type, class and RDATA by [@!RFC3597].
 
 
 # Terminology
@@ -179,20 +191,6 @@ FIXME: Consider https://github.com/NLnetLabs/simdzone/blob/main/FORMAT.md
 FIXME: (from @shane-kerr) Probably a section on how to handle errors should be
        included. Nothing too complex, but maybe prescribe a list of options?
 
-
-## Intentional extensibility
-
-[@!RFC1034] states the resource data or RDATA section of the RR
-are given using knowledge of the typical representation for the data.
-Similarly [@!RFC1035] states RDATA MUST be appropriate to the type and class.
-
-Given the intentional extensibility of the DNS, new fields and the
-corresponding syntax and semantics that apply to their presentation are
-defined by later RFCs. Earlier RFCs can only define generic syntax rules like
-the allowed use of parenthesis for line continuation, comments and the fact
-that a line feed terminates an RR.
-
-FIXME: Mention intentional extensibility further up. It is important to grasp.
 
 
 ## Control entries

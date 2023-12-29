@@ -27,9 +27,11 @@ organization = "NLnet Labs"
 
 .# Abstract
 
-The textual presentation formats originally specified in [@!RFC1034] and
-[@!RFC1035], provide a portable representation of RRs in text form. They
-define a tabular serialization format with provisions for convenient editing.
+DNS resource records (RRs) can be expressed in text form using the DNS
+presentation format. The presentation format is originally defined in
+[@!RFC1035] section 5.1 and [@!RFC1034] section 3.6.1. The presentation format
+is a concise tabular serialization format with provisions for convenient
+editing.
 
 The existing specification is ambiguous, leading to incompatibilites between
 implementations that intend to be compliant. This document redefines the
@@ -41,91 +43,45 @@ well-defined, set accepted by all implementations
 
 # Introduction
 
-The presentation format defined in [@!RFC1034] section 3.6.1 and [@!RFC1035]
-section 5.1, defines syntax and semantics to present the contents of RRs in
-text form. As a zone can be expressed in the form of a list of RRs, the
-format is most often used to portably define zones, but the format has many
-other applications.
+The presentation format defined in [@!RFC1035] section 5.1 and [@!RFC1034]
+section 3.6.1, defines syntax and semantics to present the contents of RRs in
+text form. As a zone can be expressed in the form of a sequence of RRs, the
+format is most frequently used to portably define zones, but the format has
+many applications. The term "presentation format" is officially established in
+[@!RFC8499] section 5.
 
-The presentation format is a tabular serialization format with provisions for
-convenient editing. The format is predominantly line based and defines a
-number of entries. Control, blank and rr entries. Presentation of fixed fields
-in rr entries (owner, type, class, TTL) is clearly defined, but the RDATA
-section of the RR are given using knowledge of the typical representation for
-the data. Given the intentional extensibility of the DNS, the format is
-therefore subject to change. The format can merely define a base syntax that
-future additions must adhere too. RFCs that introduce new RRs commonly
-dedicate a section to outline the extentsions to the presentation format.
-Provisions for expressing unknown RRs is provided through generic notation
-of type, class and RDATA by [@!RFC3597].
+The presentation format is a concise tabular serialization format with
+provisions for convenient editing. While [@!RFC3597] section 4 defines generic
+textual representations for type, class and RDATA, given the intentional
+extensibility of the DNS, the presentation format can merely define a generic
+text format for RRs, much like [@!RFC1035] section 4.1.3 defines a generic
+wire format for RRs. The RDATA section of the RR must be given using knowledge
+of the typical representation for the data and is out of scope though basic
+syntax rules are defined to ensure support for future additions can be
+implemented with minimal effort. The ABNF in [@!RFC9460] Appendix A
+will be updated to correctly summarizes the allowed inputs.
 
 
 # Terminology
 
 [@!RFC1035] section 5.1 specifies a format for files containing RRs in text
 form named master files. The format, with additional considerations, is most
-frequently used to define a zone, but can be used in other scenarios where RRs
-are stored in text form. [@!RFC1034] section 3.6.1 specifies the textual
-expression of RRs. The text in [@!RFC1034] states a style similar to that in
-[@!RFC1035] is adopted to present the contents of RRs. As such, [@!RFC1034]
-and [@!RFC1035] define three adjacent formats.
+frequently used to define a zone in master files, commonly referred to as zone
+files.
 
-1. Textual expression of RRs ([@!RFC1034] section 3.6.1).
-2. Master files ([@!RFC1035] section 5.1).
-3. Restrictions to master files when defining a zone ([@!RFC1035] section 5.2).
-
-
-## Textual expression of RRs
-
-The distinction between Textual expression of RRs and master files is not
-clearly defined. [@!RFC1034] merely states RRs are presented in a style
-similar to that used in master files to show the contents of RRs.
-Specifically, it states most RRs are shown on a single line, but that line
-continuations are possible using parenthesis and that blank lines may be used
-for readability. [@!RFC1035] formally defines both types of entries, plus a
-set of control entries. While there is no mention of comment in [@!RFC1034]
-section 3.6.1, it stands to reason all of the syntax and semantics for blank
-and rr entries, as defined in [@!RFC0135] section 5.1, is adopted. More so,
+[@!RFC1034] section 3.6.1 states RRs are presented in a style similar to that
+used in master files to show the contents of RRs. Specifically, it states most
+RRs are shown on a single line, but that line continuations are possible using
+parenthesis and that blank lines may be used for readability. While there is
+no mention of comments in [@!RFC1034] section 3.6.1, it stands to reason both
+blank and rr entries defined in [@!RFC0135] section 5.1 are adopted. More so,
 because comments are used in the zone data example in [@!RFC1034] section 6.1.
-Therefore, the format defined in [@!RFC1034] section 3.6.1, for all intents
-and purposes, is a subset of the format used in master files as defined by
-[@!RFC1035] section 5.1.
-
-
-## Master files
-
-Master files are text files that contain RRs in text form. Since the contents
-of a zone can be expressed in the form of a list of RRs a master file is most
-often used to define a zone, though it can be used to list a cache's contents.
-(Quoted from [RFC1035], Section 5)
-
-The master file format defines syntax and semantics for various types of
-entries. Like [@!RFC1034], it prescribes how to express the contents of RRs,
-but additionally introduces control entries for more convenient editing.
-e.g. allow for templating and deduplication through use of $INCLUDE.
-
-
-## Zone files
-
-Zone files provide a standardized means to define zones in authoritative name
-servers and are supported by most open source implementations. The additional
-restictions that apply when defining a zone are clear and consice, no
-additional syntax rules are introduced.
-
-
-## Presentation format
 
 In practice, there is no distinction between the formats defined in
 [@!RFC1034] section 3.6.1 and [@!RFC1035] section 5.1 and the term
-"presentation format" is often used instead. [@!RFC8499] section 5 formally
-consolidates both definitions by stating it is the text format used in master
-files as shown, not formally defined, in [@!RFC1034] or [@!RFC1035].
-
-The term presentation format is strongly preferred over the term master files
-because the latter may wrongfully signal it as being a format used solely for the
-purpose of defining zones within a primary authoritative name server.
-
-FIXME: This document must use the presentation format from here on!
+"presentation format" is frequently used instead. [@!RFC8499] section 5
+formally consolidates both definitions by stating it is the text format used
+in master files as shown, not formally defined, in [@!RFC1034] or [@!RFC1035].
 
 
 # Format
@@ -191,6 +147,11 @@ FIXME: Consider https://github.com/NLnetLabs/simdzone/blob/main/FORMAT.md
 FIXME: (from @shane-kerr) Probably a section on how to handle errors should be
        included. Nothing too complex, but maybe prescribe a list of options?
 
+FIXME: (from @partim) The ABNF in [@!RFC9460] requires you to escape all
+       special characters (i.e., DQUOTE, ";", "(", ")", and "\") in a quoted
+       character-string when RFC 1035 explicitly only requires DQUOTE to be
+       escaped (presumably also "\" even if it doesn’t say so). A patch can
+       be found here: https://github.com/MikeBishop/dns-alt-svc/pull/396/files
 
 
 ## Control entries
